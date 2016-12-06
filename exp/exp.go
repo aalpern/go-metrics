@@ -267,10 +267,10 @@ func (exp *exp) publishMeter(name string, metric metrics.Meter) {
 	} else {
 		m := metric.Snapshot()
 		exp.getInt(name + ".count").Set(m.Count())
-		exp.getFloat(name + ".one-minute").Set(float64(m.Rate1()))
-		exp.getFloat(name + ".five-minute").Set(float64(m.Rate5()))
-		exp.getFloat(name + ".fifteen-minute").Set(float64((m.Rate15())))
-		exp.getFloat(name + ".mean").Set(float64(m.RateMean()))
+		exp.getFloat(name + ".one-minute-rate").Set(float64(m.Rate1()))
+		exp.getFloat(name + ".five-minute-rate").Set(float64(m.Rate5()))
+		exp.getFloat(name + ".fifteen-minute-rate").Set(float64((m.Rate15())))
+		exp.getFloat(name + ".mean-rate").Set(float64(m.RateMean()))
 	}
 }
 
@@ -278,10 +278,10 @@ func convertMeter(metric metrics.Meter) *expvar.Map {
 	t := metric.Snapshot()
 	m := newMap()
 	m.Set("count", newInt(t.Count()))
-	m.Set("one-minute", newFloat(t.Rate1()))
-	m.Set("five-minute", newFloat(t.Rate5()))
-	m.Set("fifteen-minute", newFloat(t.Rate15()))
-	m.Set("mean", newFloat(t.RateMean()))
+	m.Set("one-minute-rate", newFloat(t.Rate1()))
+	m.Set("five-minute-rate", newFloat(t.Rate5()))
+	m.Set("fifteen-minute-rate", newFloat(t.Rate15()))
+	m.Set("mean-rate", newFloat(t.RateMean()))
 	return m
 }
 
@@ -299,9 +299,9 @@ func (exp *exp) publishTimer(name string, metric metrics.Timer) {
 		for i, p := range t.Percentiles(Config.Percentiles) {
 			exp.getFloat(fmt.Sprintf("%s.%s", name, Config.percentileLabels[i])).Set(scaleFloat(p))
 		}
-		exp.getFloat(name + ".one-minute").Set(float64(t.Rate1()))
-		exp.getFloat(name + ".five-minute").Set(float64(t.Rate5()))
-		exp.getFloat(name + ".fifteen-minute").Set(float64((t.Rate15())))
+		exp.getFloat(name + ".one-minute-rate").Set(float64(t.Rate1()))
+		exp.getFloat(name + ".five-minute-rate").Set(float64(t.Rate5()))
+		exp.getFloat(name + ".fifteen-minute-rate").Set(float64((t.Rate15())))
 		exp.getFloat(name + ".mean-rate").Set(float64(t.RateMean()))
 	}
 }
@@ -316,9 +316,9 @@ func convertTimer(metric metrics.Timer) *expvar.Map {
 	for i, p := range t.Percentiles(Config.Percentiles) {
 		m.Set(Config.percentileLabels[i], newFloat(scaleFloat(p)))
 	}
-	m.Set("one-minute", newFloat(t.Rate1()))
-	m.Set("five-minute", newFloat(t.Rate5()))
-	m.Set("fifteen-minute", newFloat(t.Rate15()))
+	m.Set("one-minute-rate", newFloat(t.Rate1()))
+	m.Set("five-minute-rate", newFloat(t.Rate5()))
+	m.Set("fifteen-minute-rate", newFloat(t.Rate15()))
 	m.Set("mean-rate", newFloat(t.RateMean()))
 	return m
 }
