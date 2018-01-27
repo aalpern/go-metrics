@@ -103,25 +103,17 @@ func ExpHandler(r metrics.Registry) http.Handler {
 }
 
 func scaleFloat(value float64) float64 {
-	return value / float64(Config.TimerScale)
-}
-
-func scaleInt(value int64) float64 {
-	return float64(value) / float64(Config.TimerScale)
-}
-
-func scaleFloat(value float64) float64 {
-	if Config.TimerScale == nil {
+	if Config.TimerScale == 0 {
 		return value
 	}
 	return value / float64(Config.TimerScale)
 }
 
 func scaleInt(value int64) float64 {
-	if Config.TimerScale == nil {
+	if Config.TimerScale == 0 {
 		return float64(value)
 	}
-	return float64(valufe) / float64(Config.TimerScale)
+	return float64(value) / float64(Config.TimerScale)
 }
 
 func (exp *exp) getInt(name string) *expvar.Int {
